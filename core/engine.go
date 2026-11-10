@@ -420,6 +420,7 @@ type Engine struct {
 	agentSessionIdleTimeoutNanos atomic.Int64
 	agentSessionIdleSeq          atomic.Uint64
 	maxQueuedMessages            int
+	queueSilent                  bool
 	dirHistory                   *DirHistory
 	baseWorkDir                  string
 	projectState                 *ProjectStateStore
@@ -1434,6 +1435,12 @@ func (e *Engine) SetMaxQueuedMessages(n int) {
 	if n > 0 {
 		e.maxQueuedMessages = n
 	}
+}
+
+// SetQueueSilent suppresses queue acceptance replies, leaving queue errors visible.
+// Configure before starting the engine.
+func (e *Engine) SetQueueSilent(silent bool) {
+	e.queueSilent = silent
 }
 
 func (e *Engine) SetRelayManager(rm *RelayManager) {
@@ -3476,7 +3483,9 @@ func (e *Engine) queueMessageForBusySession(p Platform, msg *Message, interactiv
 		"user", msg.UserName,
 		"queue_depth", queueDepth,
 	)
-	e.reply(p, msg.ReplyCtx, e.i18n.T(MsgMessageQueued))
+	if !e.queueSilent {
+		e.reply(p, msg.ReplyCtx, e.i18n.T(MsgMessageQueued))
+	}
 	return true
 }
 

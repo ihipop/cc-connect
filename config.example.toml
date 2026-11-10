@@ -248,6 +248,14 @@ level = "info" # debug, info, warn, error
 # # env block, NOT here.
 # run_as_env = ["PGSSLROOTCERT", "PGSSLMODE"]
 # =============================================================================
+# Message Queue / 消息队列
+# =============================================================================
+# [queue]
+# max_depth = 5            # Max queued messages per session / 每个会话最多排队消息数
+# silent = false           # Hide queue acceptance replies; keep queue-full/failure alerts
+#                          # 隐藏入队确认提示，保留队列满和处理失败提示（默认 false）
+
+# =============================================================================
 # Streaming Preview / 流式预览
 # =============================================================================
 # Real-time message preview: shows agent output as it streams, updating the

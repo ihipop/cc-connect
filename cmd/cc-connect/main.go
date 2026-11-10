@@ -698,6 +698,7 @@ func main() {
 		}
 
 		// Wire queue depth
+		engine.SetQueueSilent(cfg.Queue.Silent)
 		if cfg.Queue.MaxDepth != nil && *cfg.Queue.MaxDepth > 0 {
 			engine.SetMaxQueuedMessages(*cfg.Queue.MaxDepth)
 		}
